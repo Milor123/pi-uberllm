@@ -95,6 +95,19 @@ This extension sets exactly one, in `src/catalog.ts`:
 Reasoning uses the OpenRouter wire format, because UberLLM documents its catalog
 as OpenRouter-shaped and uses OpenRouter's names in `supported_parameters`.
 
+Every Pi thinking level was verified against the live service:
+
+| Pi level | Sent as | Result |
+| --- | --- | --- |
+| `off` | `reasoning: { effort: "none" }` | accepted, zero reasoning tokens |
+| `minimal` … `max` | `reasoning: { effort: "<level>" }` | accepted |
+
+No `thinkingLevelMap` is needed, because every Pi level maps 1:1. When a model
+does not offer the level you picked, UberLLM returns the nearest level it does
+offer instead of failing. Note that UberLLM rejects the spellings `"off"` and
+`"disabled"` with HTTP 400 — Pi sends `"none"`, so this never triggers, and the
+`"openai"` format has no equivalent for a disabled level anyway.
+
 Models are filtered to `type: "chat"`, `available: true` and `nsfw: false`.
 UberLLM's `available` flag is live marketplace state: a model with no seller
 right now answers `503 no_available_provider`, so it is not offered.

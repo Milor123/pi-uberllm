@@ -57,6 +57,16 @@ export function openAiCompat(entry: UberLLMModel): ProviderChatModelConfig["comp
   // UberLLM documents its catalog as OpenRouter-shaped ("tools built for
   // OpenRouter's list read ours as is") and its supported_parameters use
   // OpenRouter's names, so reasoning travels in the OpenRouter wire format.
+  //
+  // Verified against the live service on every Pi thinking level:
+  //   off     -> reasoning:{effort:"none"}      200, 0 reasoning characters
+  //   minimal -> reasoning:{effort:"minimal"}   200 (no level error; UberLLM
+  //   low/medium/high/xhigh/max                   snaps to the nearest level the
+  //                                               model does offer)
+  // UberLLM rejects effort:"off" and effort:"disabled" with HTTP 400, but Pi
+  // sends "none" for a disabled level, so no thinkingLevelMap is needed: every
+  // Pi level maps 1:1. Do not switch this to "openai", which sends
+  // reasoning_effort and has no equivalent for a cleanly disabled level.
   const usesOpenRouterReasoning = (entry.supported_parameters ?? []).includes("reasoning");
   const compat: Record<string, unknown> = { supportsDeveloperRole: false };
 

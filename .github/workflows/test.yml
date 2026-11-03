@@ -10,7 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Node 24 runs these TypeScript tests directly by stripping types, with no
+      # build step. Node 22 does not, and fails with MODULE_NOT_FOUND.
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - run: npm test

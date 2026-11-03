@@ -1,0 +1,36 @@
+{
+  "name": "pi-uberllm",
+  "version": "0.1.0",
+  "description": "UberLLM model provider for Pi: live model catalog over both the OpenAI-compatible and the Anthropic-compatible UberLLM surfaces.",
+  "keywords": [
+    "pi",
+    "pi-package",
+    "pi-extension",
+    "uberllm"
+  ],
+  "type": "module",
+  "files": [
+    "src/**"
+  ],
+  "author": "Milor123",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Milor123/pi-uberllm.git"
+  },
+  "homepage": "https://github.com/Milor123/pi-uberllm#readme",
+  "bugs": {
+    "url": "https://github.com/Milor123/pi-uberllm/issues"
+  },
+  "pi": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  }
+}

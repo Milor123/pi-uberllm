@@ -2,8 +2,7 @@
 
 A [Pi](https://pi.dev) extension that adds [UberLLM](https://uberllm.dev) as a model provider.
 
-<img width="825" height="495" alt="imagen" src="https://github.com/user-attachments/assets/cdf19f0e-1b14-4490-879e-b74de656c0c0" />
-
+<img width="825" height="495" alt="UberLLM models listed in Pi's /model picker" src="https://github.com/user-attachments/assets/cdf19f0e-1b14-4490-879e-b74de656c0c0" />
 
 It reads UberLLM's live model catalog and registers it with Pi, so every model
 UberLLM serves shows up in the `/model` picker. There is no model list to

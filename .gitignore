@@ -5,3 +5,6 @@ Thumbs.db
 
 # Internal ODD working document: process, not part of the published package.
 odd/
+
+# Local maintainer notes: process, not product.
+SKILL.md

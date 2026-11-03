@@ -23,7 +23,7 @@ pi install git:github.com/Milor123/pi-uberllm
 Pin a version instead of tracking the default branch:
 
 ```bash
-pi install git:github.com/Milor123/pi-uberllm@v0.1.0
+pi install git:github.com/Milor123/pi-uberllm@v0.2.0
 ```
 
 To try it for one invocation without adding it to your settings:

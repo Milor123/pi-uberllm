@@ -61,8 +61,21 @@ async function loadCatalog(signal: AbortSignal, force = false): Promise<FetchedC
   if (!force && cachedCatalog && Date.now() - cachedCatalog.fetchedAt < CATALOG_TTL_MS) {
     return cachedCatalog;
   }
-  cachedCatalog = await fetchCatalog(signal);
-  return cachedCatalog;
+
+  try {
+    cachedCatalog = await fetchCatalog(signal);
+    return cachedCatalog;
+  } catch (error) {
+    // A transient failure must not drop a catalog we already have. Pi aborts
+    // a model-catalog refresh after 15 seconds, and one slow provider can
+    // take that abort out on the others, so serving the last good catalog
+    // keeps this provider usable instead of empty.
+    if (cachedCatalog) {
+      console.warn(`[uberllm] catalog refresh failed, serving cached catalog: ${String(error)}`);
+      return cachedCatalog;
+    }
+    throw error;
+  }
 }
 
 export default async function uberllm(pi: ExtensionAPI): Promise<void> {

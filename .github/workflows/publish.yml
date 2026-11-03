@@ -1,0 +1,44 @@
+name: publish
+
+# Publishes to npm when a version tag is pushed. The npm page is what makes the
+# package discoverable in the Pi gallery (it indexes npm by the `pi-package`
+# keyword), so this workflow is what keeps the listing current.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Required for npm provenance: the signed attestation that links the tarball
+  # to this exact commit and workflow run.
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      # Never publish something that does not pass its own tests.
+      - run: npm test
+
+      # Until NPM_TOKEN exists this skips with a notice instead of failing, so a
+      # tag push stays green. GitHub does not allow a secret in a step-level
+      # `if`, hence the shell check.
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::notice::NPM_TOKEN is not set, skipping publish. Add it with: gh secret set NPM_TOKEN"
+            exit 0
+          fi
+          # --provenance signs the tarball against this repository and commit.
+          npm publish --provenance --access public
